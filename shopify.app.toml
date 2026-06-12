@@ -1,0 +1,45 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "e723257a32122d52ab4132987ac75f9e"
+application_url = "https://example.com"
+embedded = true
+name = "seyben-store-app"
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+# Seyben necesita leer catalogo, paginas y politicas para entrenar el agente.
+# read_products  → productos + variantes + precios
+# read_content   → paginas, blogs, articulos
+# read_themes    → para el Theme App Extension que inyecta el widget
+# read_locales   → idioma por defecto y locales activos
+scopes = "read_products,read_content,read_themes,read_locales"
+
+[webhooks]
+api_version = "2026-07"
+
+  [[webhooks.subscriptions]]
+  uri = "/webhooks/app/uninstalled"
+  topics = [ "app/uninstalled" ]
+
+  [[webhooks.subscriptions]]
+  uri = "/webhooks/app/scopes_update"
+  topics = [ "app/scopes_update" ]
+
+  # Cambios en catalogo -> resync inmediato del knowledge del agente
+  [[webhooks.subscriptions]]
+  uri = "/webhooks/sync"
+  topics = [
+    "products/create",
+    "products/update",
+    "products/delete",
+    "collections/create",
+    "collections/update",
+    "collections/delete",
+    "shop/update",
+  ]
+
+[auth]
+redirect_urls = [ "https://example.com/api/auth" ]
+
+[build]
+automatically_update_urls_on_dev = true
