@@ -150,7 +150,9 @@ export default function Index() {
   const [color, setColor] = useState<string>("#7c3aed");
   const [actionText, setActionText] = useState<string>("Habla con nosotros");
   const [position, setPosition] = useState<string>("bottom-right");
-  const [plan, setPlan] = useState<string>("free");
+  // El wizard siempre crea el agente en plan Free. El upgrade a Starter/Pro se
+  // hace desde /app/pricing via Shopify Billing API.
+  const plan = "free";
   const [ownerName, setOwnerName] = useState<string>("");
   const [ownerEmail, setOwnerEmail] = useState<string>(shop?.contactEmail || "");
 
@@ -298,18 +300,14 @@ export default function Index() {
       {/* ============ PASO 4: Plan ============ */}
       <s-section heading="4. Plan">
         <s-stack direction="block" gap="base">
-          <s-select
-            label="Empieza con un plan"
-            value={plan}
-            onChange={readValue(setPlan)}
-          >
-            <s-option value="free">Free — 50 conversaciones/mes</s-option>
-            <s-option value="starter">Starter — 49 EUR/mes, 500 conv</s-option>
-            <s-option value="pro">Pro — 70 EUR/mes, 2000 conv + voz</s-option>
-          </s-select>
-          <s-text tone="neutral">
-            Puedes cambiar de plan en cualquier momento. Pro incluye voz.
-          </s-text>
+          <s-paragraph>
+            Empezaras en el plan <strong>Free</strong> (50 conversaciones/mes). Cuando quieras
+            ampliar a Starter (500 conv) o Pro (2000 conv + voz) puedes activar el cobro
+            con un click desde la pagina de planes.
+          </s-paragraph>
+          <s-stack direction="inline" gap="base">
+            <s-button href="/app/pricing" variant="secondary">Ver planes y precios</s-button>
+          </s-stack>
         </s-stack>
       </s-section>
 
@@ -363,7 +361,7 @@ export default function Index() {
                     <strong>Paginas aprendidas:</strong> {fetcher.data.pages_count}
                   </s-text>
                   <s-text tone="neutral">
-                    Knowledge base: {fetcher.data.knowledge_chars.toLocaleString()} caracteres
+                    Knowledge base: {Number(fetcher.data.knowledge_chars || 0).toLocaleString()} caracteres
                     (leidos directamente de tu Shopify, sin scraping).
                   </s-text>
                 </>
@@ -379,8 +377,12 @@ export default function Index() {
               <s-button
                 href={`https://seyben.netlify.app/dashboard?client=${fetcher.data.lead_id}`}
                 target="_blank"
+                variant="primary"
               >
                 Abrir panel Seyben
+              </s-button>
+              <s-button href="/app/pricing">
+                Activar Starter o Pro
               </s-button>
             </s-stack>
           </s-stack>

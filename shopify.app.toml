@@ -38,6 +38,11 @@ api_version = "2026-07"
     "shop/update",
   ]
 
+  # Cambios en subscripcion -> sync plan_tier en Supabase
+  [[webhooks.subscriptions]]
+  uri = "/webhooks/app_subscriptions/update"
+  topics = [ "app_subscriptions/update" ]
+
 [auth]
 redirect_urls = [ "https://example.com/api/auth" ]
 

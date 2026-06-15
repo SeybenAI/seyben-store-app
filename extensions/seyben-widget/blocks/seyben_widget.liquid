@@ -1,0 +1,34 @@
+{% comment %}
+  Seyben chatbot — App embed block.
+
+  Cuando el merchant activa este bloque en el editor de tema, inyectamos un
+  unico <script> en el storefront que carga el SDK del chatbot configurado
+  para ESTA tienda. La resolucion shop_domain -> client_id la hace el
+  endpoint shopify_widget de Supabase (302 -> sdk.js?client-id=<uuid>).
+
+  Ventajas de este enfoque:
+    - Cero codigo Liquid extra: solo una etiqueta script.
+    - Si el merchant desinstala la app, el endpoint devuelve no-op JS y el
+      widget desaparece sin tener que tocar el tema.
+    - El client_id nunca queda hardcodeado en el tema (esta en Supabase).
+{% endcomment %}
+
+<script
+  src="https://wiaqchjwnlrynmrvfsrj.functions.supabase.co/functions/v1/shopify_widget?shop={{ shop.permanent_domain }}"
+  async
+  defer
+  data-seyben="app-embed"
+></script>
+
+{% schema %}
+{
+  "name": "Seyben chatbot",
+  "target": "body",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "El chatbot Seyben se mostrara automaticamente en toda la tienda. Si lo quieres ocultar temporalmente, desactiva este bloque."
+    }
+  ]
+}
+{% endschema %}
