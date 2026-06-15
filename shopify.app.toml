@@ -12,7 +12,7 @@ name = "seyben-store-app"
 # read_content   → paginas, blogs, articulos
 # read_themes    → para el Theme App Extension que inyecta el widget
 # read_locales   → idioma por defecto y locales activos
-scopes = "read_products,read_content,read_themes,read_locales"
+scopes = "read_products,read_content,read_themes,read_locales,read_legal_policies"
 
 [webhooks]
 api_version = "2026-07"

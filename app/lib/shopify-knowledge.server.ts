@@ -75,10 +75,6 @@ const SHOP_QUERY = /* GraphQL */ `
         address1 address2 city province country zip
       }
       shipsToCountries
-      shopPolicies {
-        title
-        body
-      }
     }
   }
 `;
@@ -90,8 +86,21 @@ type ShopResp = {
     currencyCode: string;
     primaryDomain: { host: string; url: string };
     billingAddress?: Record<string, string | null>;
-    shopPolicies?: { title: string; body: string }[];
   };
+};
+
+// Politicas legales - query separada porque requiere scope read_legal_policies
+// que puede no estar concedido. Si falla, seguimos sin politicas.
+const POLICIES_QUERY = /* GraphQL */ `
+  query SeybenPolicies {
+    shop {
+      shopPolicies { title body }
+    }
+  }
+`;
+
+type PoliciesResp = {
+  shop: { shopPolicies?: { title: string; body: string }[] };
 };
 
 // ---------------------------------------------------------------------------
@@ -187,7 +196,7 @@ function fmtAddress(b?: Record<string, string | null>): string | undefined {
 export async function fetchShopifyKnowledge(
   admin: AdminGql,
 ): Promise<ShopifyKnowledgePayload> {
-  // 1. Shop + politicas
+  // 1. Shop info
   const shopData = await gql<ShopResp>(admin, SHOP_QUERY);
   const shop: ShopifyKnowledgePayload["shop"] = {
     name: shopData.shop.name,
@@ -196,9 +205,19 @@ export async function fetchShopifyKnowledge(
     address: fmtAddress(shopData.shop.billingAddress),
     currencyCode: shopData.shop.currencyCode,
   };
-  const policies: ShopifyPolicy[] = (shopData.shop.shopPolicies || [])
-    .filter((p) => p?.body && p.body.trim().length > 0)
-    .map((p) => ({ title: p.title, body: p.body }));
+
+  // 1b. Politicas legales - query aparte porque requiere scope
+  // read_legal_policies. Si el merchant no lo concedio (o falla por otra
+  // razon), seguimos sin politicas en vez de tirar todo abajo.
+  let policies: ShopifyPolicy[] = [];
+  try {
+    const polData = await gql<PoliciesResp>(admin, POLICIES_QUERY);
+    policies = (polData.shop.shopPolicies || [])
+      .filter((p) => p?.body && p.body.trim().length > 0)
+      .map((p) => ({ title: p.title, body: p.body }));
+  } catch (err) {
+    console.warn("[seyben] policies fetch failed (likely scope missing):", String(err));
+  }
 
   // 2. Productos (paginado hasta MAX_PRODUCTS)
   const products: ShopifyProduct[] = [];
