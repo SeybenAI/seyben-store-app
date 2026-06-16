@@ -18,6 +18,10 @@
   # Node 22 LTS - cumple con engines en package.json (>=22.12).
   # Los binaryTargets de Prisma estan en schema.prisma (no como env var).
   NODE_VERSION = "22"
+  # SHOPIFY_API_KEY (client_id publico de Shopify) y SCOPES viven en
+  # shopify.app.toml comiteado al repo. No son secrets — el secret scanner
+  # de Netlify los confunde al verlos tambien como env vars.
+  SECRETS_SCAN_OMIT_KEYS = "SHOPIFY_API_KEY,SCOPES"
 
 # Headers de seguridad globales (Shopify exige X-Frame-Options ALLOWALL
 # para el embedded admin, asi que NO lo pongas a DENY).
