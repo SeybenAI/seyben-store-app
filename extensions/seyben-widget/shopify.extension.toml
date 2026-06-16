@@ -3,6 +3,7 @@ api_version = "2026-07"
 [[extensions]]
 name = "Seyben chatbot widget"
 handle = "seyben-widget"
+uid = "d61ef2c0-21ba-914f-8274-1da608e345839b6edd04"
 type = "theme"
 
   [extensions.capabilities]

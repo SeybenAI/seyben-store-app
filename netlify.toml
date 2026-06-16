@@ -1,0 +1,31 @@
+# Netlify config para Seyben Shopify app (React Router v7).
+#
+# El plugin @netlify/vite-plugin-react-router se encarga de convertir el
+# build de React Router en Netlify Functions automaticamente. No hace
+# falta configurar functions individuales.
+#
+# Notas:
+# - En Netlify Pro las functions tienen 26s timeout (suficiente para el
+#   action de "Crear agente" que tarda 5-15s).
+# - Las env vars (SHOPIFY_API_KEY, DATABASE_URL, etc.) se configuran desde
+#   el dashboard Netlify -> Site settings -> Environment variables.
+
+[build]
+  command = "npm run setup && npm run build"
+  publish = "build/client"
+
+[build.environment]
+  # Forzamos a Prisma a generar el binary engine para la arquitectura de
+  # Netlify (Linux x64 con OpenSSL 3) y no incluir queryEngineType=library
+  # (que no funciona bien en serverless edge envs).
+  PRISMA_CLI_BINARY_TARGETS = "native,linux-musl-openssl-3.0.x,debian-openssl-3.0.x"
+  # Node 22 LTS - cumple con engines en package.json (>=22.12)
+  NODE_VERSION = "22"
+
+# Headers de seguridad globales (Shopify exige X-Frame-Options ALLOWALL
+# para el embedded admin, asi que NO lo pongas a DENY).
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

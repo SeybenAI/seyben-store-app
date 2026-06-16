@@ -5,12 +5,13 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// Note that some adapters may set a maximum length for the String type by default, please ensure your strings are long
-// enough when changing adapters.
-// See https://www.prisma.io/docs/orm/reference/prisma-schema-reference#string for more information
+// Postgres en Supabase (proyecto wiaqchjwnlrynmrvfsrj). En produccion
+// (Netlify Functions) usamos el transaction pooler en el puerto 6543 con
+// pgbouncer=true para serverless-friendly. En local, DATABASE_URL en .env
+// puede apuntar al pooler tambien.
 datasource db {
-  provider = "sqlite"
-  url      = "file:dev.sqlite"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Session {
