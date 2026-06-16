@@ -21,7 +21,10 @@
   # SHOPIFY_API_KEY (client_id publico de Shopify) y SCOPES viven en
   # shopify.app.toml comiteado al repo. No son secrets — el secret scanner
   # de Netlify los confunde al verlos tambien como env vars.
-  SECRETS_SCAN_OMIT_KEYS = "SHOPIFY_API_KEY,SCOPES"
+  # SHOPIFY_API_KEY (client_id Shopify publico), SCOPES (config publica), y
+  # SHOPIFY_APP_URL (URL publica de la app) aparecen en shopify.app.toml y/o
+  # privacy.tsx y NO son secrets — son configuracion publica.
+  SECRETS_SCAN_OMIT_KEYS = "SHOPIFY_API_KEY,SCOPES,SHOPIFY_APP_URL"
 
 # Headers de seguridad globales (Shopify exige X-Frame-Options ALLOWALL
 # para el embedded admin, asi que NO lo pongas a DENY).
