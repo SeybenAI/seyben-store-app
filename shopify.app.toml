@@ -1,7 +1,7 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "e723257a32122d52ab4132987ac75f9e"
-application_url = "https://example.com"
+application_url = "https://seyben-store-app.netlify.app"
 embedded = true
 name = "seyben-store-app"
 
@@ -44,7 +44,13 @@ api_version = "2026-07"
   topics = [ "app_subscriptions/update" ]
 
 [auth]
-redirect_urls = [ "https://example.com/api/auth" ]
+redirect_urls = [
+  "https://seyben-store-app.netlify.app/auth/callback",
+  "https://seyben-store-app.netlify.app/auth/shopify/callback",
+  "https://seyben-store-app.netlify.app/api/auth/callback",
+]
 
 [build]
+# Cuando lanzas `shopify app dev`, el CLI cambia application_url al tunnel
+# de Cloudflare temporalmente. Para volver a produccion -> `shopify app deploy`.
 automatically_update_urls_on_dev = true
