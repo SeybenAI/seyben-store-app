@@ -43,18 +43,13 @@ api_version = "2026-07"
   uri = "/webhooks/app_subscriptions/update"
   topics = [ "app_subscriptions/update" ]
 
-  # GDPR mandatory webhooks (requisito Shopify App Store)
-  [[webhooks.subscriptions]]
-  uri = "/webhooks/customers/data_request"
-  topics = [ "customers/data_request" ]
-
-  [[webhooks.subscriptions]]
-  uri = "/webhooks/customers/redact"
-  topics = [ "customers/redact" ]
-
-  [[webhooks.subscriptions]]
-  uri = "/webhooks/shop/redact"
-  topics = [ "shop/redact" ]
+  # GDPR mandatory webhooks (requisito Shopify App Store).
+  # Van en una seccion aparte privacy_compliance, NO en subscriptions, porque
+  # son obligatorios y tienen un formato especial (sin "topic", solo URL).
+  [webhooks.privacy_compliance]
+  customer_data_request_url = "/webhooks/customers/data_request"
+  customer_deletion_url = "/webhooks/customers/redact"
+  shop_deletion_url = "/webhooks/shop/redact"
 
 [auth]
 redirect_urls = [
