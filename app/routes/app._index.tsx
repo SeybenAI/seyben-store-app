@@ -151,7 +151,7 @@ export default function Index() {
   const [actionText, setActionText] = useState<string>("Habla con nosotros");
   const [position, setPosition] = useState<string>("bottom-right");
   // El wizard siempre crea el agente en plan Free. El upgrade a Starter/Pro se
-  // hace desde /app/pricing via Shopify Billing API.
+  // hace desde /app/pricing via Managed Pricing (Shopify gestiona el cobro).
   const plan = "free";
   const [ownerName, setOwnerName] = useState<string>("");
   const [ownerEmail, setOwnerEmail] = useState<string>(shop?.contactEmail || "");

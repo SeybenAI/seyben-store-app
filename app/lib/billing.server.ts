@@ -1,13 +1,12 @@
-// Shopify Billing API helpers.
+// Helpers de planes Seyben para Managed Pricing.
 //
-// Modelo: una sola subscripcion recurrente por install. Cuando el merchant
-// quiere cambiar de plan: cancelamos la actual y creamos otra. Shopify les
-// prorratea automaticamente.
-//
-// En dev stores marcamos test:true para que Shopify no cobre. En produccion
-// detectamos si la tienda es de desarrollo (shop.plan_displayName contiene
-// "Developer Preview" o "Plus Sandbox") para mantener test:true sin tener
-// que tocar codigo.
+// IMPORTANTE: con Managed Pricing NO creamos cargos por codigo. Shopify gestiona
+// el cobro desde su pagina de planes (ver app/routes/app.billing.plans.tsx).
+// Aqui solo:
+//   - definimos los planes (para mostrarlos en /app/pricing)
+//   - leemos la subscripcion activa del merchant (para saber su plan actual)
+// La sincronizacion de plan_tier en Supabase ocurre en el webhook
+// app_subscriptions/update cuando el merchant cambia de plan en Shopify.
 
 type AdminGql = {
   graphql: (query: string, opts?: { variables?: Record<string, unknown> }) => Promise<Response>;
@@ -54,135 +53,8 @@ export function isPaidPlan(key: string): key is PaidPlanKey {
 }
 
 // ---------------------------------------------------------------------------
-// Detectar si es development store -> test:true en la subscripcion
-// ---------------------------------------------------------------------------
-const SHOP_PLAN_QUERY = /* GraphQL */ `
-  query SeybenShopPlan {
-    shop {
-      myshopifyDomain
-      plan { displayName partnerDevelopment shopifyPlus }
-    }
-  }
-`;
-
-type ShopPlanResp = {
-  shop: {
-    myshopifyDomain: string;
-    plan: { displayName: string; partnerDevelopment: boolean; shopifyPlus: boolean };
-  };
-};
-
-async function shouldUseTestBilling(admin: AdminGql): Promise<boolean> {
-  try {
-    const res = await admin.graphql(SHOP_PLAN_QUERY);
-    const data = (await res.json()).data as ShopPlanResp;
-    // partnerDevelopment = development store de un partner. Shopify exige test:true.
-    return Boolean(data?.shop?.plan?.partnerDevelopment);
-  } catch (err) {
-    console.warn("[billing] shop plan lookup failed, assuming test=true:", err);
-    return true;
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Crear subscripcion -> devuelve confirmationUrl para redirigir al merchant
-// ---------------------------------------------------------------------------
-const CREATE_SUBSCRIPTION_MUTATION = /* GraphQL */ `
-  mutation SeybenCreateSubscription(
-    $name: String!
-    $returnUrl: URL!
-    $lineItems: [AppSubscriptionLineItemInput!]!
-    $test: Boolean
-  ) {
-    appSubscriptionCreate(
-      name: $name
-      returnUrl: $returnUrl
-      lineItems: $lineItems
-      test: $test
-    ) {
-      userErrors { field message }
-      confirmationUrl
-      appSubscription { id name status test }
-    }
-  }
-`;
-
-export async function createSubscription(
-  admin: AdminGql,
-  planKey: PaidPlanKey,
-  returnUrl: string,
-): Promise<{ confirmationUrl: string; subscriptionId: string; test: boolean }> {
-  const plan = PLAN_DEFS[planKey];
-  if (!plan) throw new Error(`Plan desconocido: ${planKey}`);
-
-  const test = await shouldUseTestBilling(admin);
-
-  const variables = {
-    name: `Seyben ${plan.name}`,
-    returnUrl,
-    test,
-    lineItems: [{
-      plan: {
-        appRecurringPricingDetails: {
-          price: { amount: plan.price, currencyCode: plan.currency },
-          interval: plan.interval,
-        },
-      },
-    }],
-  };
-
-  const res = await admin.graphql(CREATE_SUBSCRIPTION_MUTATION, { variables });
-  const data = (await res.json()).data as {
-    appSubscriptionCreate: {
-      userErrors: { field: string[]; message: string }[];
-      confirmationUrl: string | null;
-      appSubscription: { id: string; status: string; test: boolean } | null;
-    };
-  };
-
-  const result = data?.appSubscriptionCreate;
-  if (!result) throw new Error("appSubscriptionCreate sin respuesta");
-  if (result.userErrors?.length) {
-    throw new Error(
-      "appSubscriptionCreate errors: " +
-        result.userErrors.map((e) => `${(e.field || []).join(".")}: ${e.message}`).join(" | "),
-    );
-  }
-  if (!result.confirmationUrl || !result.appSubscription) {
-    throw new Error("appSubscriptionCreate sin confirmationUrl");
-  }
-  return {
-    confirmationUrl: result.confirmationUrl,
-    subscriptionId: result.appSubscription.id,
-    test: result.appSubscription.test,
-  };
-}
-
-// ---------------------------------------------------------------------------
-// Cancelar subscripcion existente (para cambiar de plan)
-// ---------------------------------------------------------------------------
-const CANCEL_SUBSCRIPTION_MUTATION = /* GraphQL */ `
-  mutation SeybenCancelSubscription($id: ID!) {
-    appSubscriptionCancel(id: $id) {
-      userErrors { field message }
-      appSubscription { id status }
-    }
-  }
-`;
-
-export async function cancelSubscription(admin: AdminGql, id: string): Promise<void> {
-  const res = await admin.graphql(CANCEL_SUBSCRIPTION_MUTATION, { variables: { id } });
-  const data = (await res.json()).data as {
-    appSubscriptionCancel: { userErrors: { message: string }[] };
-  };
-  const errs = data?.appSubscriptionCancel?.userErrors;
-  if (errs?.length) {
-    throw new Error("Cancel errors: " + errs.map((e) => e.message).join("; "));
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Estado actual: subscripcion activa (si existe)
+// Estado actual: subscripcion activa (si existe). Sigue funcionando igual con
+// Managed Pricing porque la subscripcion la crea Shopify, no nosotros.
 // ---------------------------------------------------------------------------
 const CURRENT_SUBSCRIPTIONS_QUERY = /* GraphQL */ `
   query SeybenCurrentSubscriptions {

@@ -1,5 +1,5 @@
 import type { HeadersFunction, LoaderFunctionArgs } from "react-router";
-import { useLoaderData, useNavigate } from "react-router";
+import { useLoaderData } from "react-router";
 import { authenticate } from "../shopify.server";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 import {
@@ -26,15 +26,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export default function Pricing() {
   const { active, plans } = useLoaderData<typeof loader>();
-  const navigate = useNavigate();
 
   const currentKey = active?.planKey ?? "free";
 
-  const upgrade = (planKey: "starter" | "pro") => {
-    // Navegacion interna; la ruta /app/billing/activate/$plan se encarga del
-    // redirect a la URL de confirmacion de Shopify (top-level via App Bridge).
-    navigate(`/app/billing/activate/${planKey}`);
-  };
+  // Managed Pricing: todos los botones de upgrade/cambio llevan a la pagina de
+  // planes gestionada por Shopify (via /app/billing/plans, que redirige fuera
+  // del iframe). Shopify gestiona el cobro; el plan se sincroniza luego por el
+  // webhook app_subscriptions/update.
+  const MANAGE_PLANS_HREF = "/app/billing/plans";
 
   return (
     <s-page heading="Planes Seyben">
@@ -81,7 +80,7 @@ export default function Pricing() {
           {currentKey === "starter" ? (
             <s-badge tone="success">Plan actual</s-badge>
           ) : (
-            <s-button onClick={() => upgrade("starter")}>
+            <s-button href={MANAGE_PLANS_HREF}>
               {currentKey === "free" ? "Activar Starter" : "Cambiar a Starter"}
             </s-button>
           )}
@@ -102,7 +101,7 @@ export default function Pricing() {
           {currentKey === "pro" ? (
             <s-badge tone="success">Plan actual</s-badge>
           ) : (
-            <s-button variant="primary" onClick={() => upgrade("pro")}>
+            <s-button variant="primary" href={MANAGE_PLANS_HREF}>
               {currentKey === "free" ? "Activar Pro" : "Cambiar a Pro"}
             </s-button>
           )}
