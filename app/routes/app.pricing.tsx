@@ -104,9 +104,9 @@ export default function Pricing() {
           <s-stack direction="block" gap="small-200">
             <s-text>✓ {plans.pro.conversations} conversaciones/mes</s-text>
             <s-text>✓ Conocimiento exhaustivo de TODA tu tienda: catalogo, precios, envios, devoluciones y FAQs</s-text>
-            <s-text>✓ Voz activada (150 minutos incluidos)</s-text>
             <s-text>✓ Soporte prioritario</s-text>
             <s-text>✓ 15 dias gratis</s-text>
+            <s-text>✓ Voz activada (150 minutos incluidos)</s-text>
           </s-stack>
           {currentKey === "pro" ? (
             <s-badge tone="success">Plan actual</s-badge>
