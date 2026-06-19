@@ -21,7 +21,7 @@ export const PLAN_DEFS = {
     interval: "EVERY_30_DAYS" as const,
     conversations: 500,
     voice: false,
-    description: "Hasta 500 conversaciones/mes. Chat de texto + KB ilimitada.",
+    description: "Para tiendas con trafico constante.",
   },
   pro: {
     key: "pro" as const,
@@ -31,7 +31,7 @@ export const PLAN_DEFS = {
     interval: "EVERY_30_DAYS" as const,
     conversations: 2000,
     voice: true,
-    description: "Hasta 2000 conversaciones/mes. Incluye 150 minutos de voz.",
+    description: "Para pymes que quieren un agente experto.",
   },
 } as const;
 
@@ -45,7 +45,7 @@ export const FREE_PLAN = {
   currency: "USD",
   conversations: 50,
   voice: false,
-  description: "50 conversaciones/mes. Para probar Seyben sin compromiso.",
+  description: "Para probar el producto.",
 } as const;
 
 export function isPaidPlan(key: string): key is PaidPlanKey {
