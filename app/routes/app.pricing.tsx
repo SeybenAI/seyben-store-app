@@ -70,7 +70,6 @@ export default function Pricing() {
           <s-stack direction="block" gap="small-200">
             <s-text>✓ {plans.free.conversations} conversaciones/mes</s-text>
             <s-text>✓ Conocimiento extraido de tu tienda automaticamente</s-text>
-            <s-text>✓ 15 dias gratis</s-text>
             <s-text tone="neutral">✕ Sin voz</s-text>
           </s-stack>
           {currentKey === "free" && <s-badge tone="info">Plan actual</s-badge>}
