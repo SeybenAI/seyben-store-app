@@ -243,6 +243,7 @@ export default function Index() {
                 onClick={() => setColor(c)}
                 aria-label={`Color ${c}`}
                 style={{
+                  boxSizing: "border-box",
                   width: 36,
                   height: 36,
                   borderRadius: "50%",
@@ -258,11 +259,12 @@ export default function Index() {
               title="Elige tu propio color"
               aria-label="Color personalizado"
               style={{
+                boxSizing: "border-box",
                 position: "relative",
                 width: 36,
                 height: 36,
                 borderRadius: "50%",
-                border: PRESET_COLORS.includes(color) ? "none" : "3px solid #1a1a1a",
+                border: PRESET_COLORS.includes(color) ? "2px solid #e1e1e1" : "3px solid #1a1a1a",
                 cursor: "pointer",
                 overflow: "hidden",
                 display: "grid",
