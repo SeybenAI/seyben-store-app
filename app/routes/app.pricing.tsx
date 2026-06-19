@@ -69,7 +69,7 @@ export default function Pricing() {
           <s-paragraph>{plans.free.description}</s-paragraph>
           <s-stack direction="block" gap="small-200">
             <s-text>✓ {plans.free.conversations} conversaciones/mes</s-text>
-            <s-text>✓ Conocimiento extraido de tu tienda automaticamente</s-text>
+            <s-text>✓ Conocimiento exhaustivo de TODA tu tienda: catalogo, precios, envios, devoluciones y FAQs</s-text>
             <s-text tone="neutral">✕ Sin voz</s-text>
           </s-stack>
           {currentKey === "free" && <s-badge tone="info">Plan actual</s-badge>}
@@ -82,7 +82,7 @@ export default function Pricing() {
           <s-paragraph>{plans.starter.description}</s-paragraph>
           <s-stack direction="block" gap="small-200">
             <s-text>✓ {plans.starter.conversations} conversaciones/mes</s-text>
-            <s-text>✓ Conocimiento extraido de tu tienda automaticamente</s-text>
+            <s-text>✓ Conocimiento exhaustivo de TODA tu tienda: catalogo, precios, envios, devoluciones y FAQs</s-text>
             <s-text>✓ Soporte por email</s-text>
             <s-text>✓ 15 dias gratis</s-text>
             <s-text tone="neutral">✕ Sin voz</s-text>
@@ -103,7 +103,7 @@ export default function Pricing() {
           <s-paragraph>{plans.pro.description}</s-paragraph>
           <s-stack direction="block" gap="small-200">
             <s-text>✓ {plans.pro.conversations} conversaciones/mes</s-text>
-            <s-text>✓ Conocimiento extraido de tu tienda automaticamente</s-text>
+            <s-text>✓ Conocimiento exhaustivo de TODA tu tienda: catalogo, precios, envios, devoluciones y FAQs</s-text>
             <s-text>✓ Voz activada (150 minutos incluidos)</s-text>
             <s-text>✓ Soporte prioritario</s-text>
             <s-text>✓ 15 dias gratis</s-text>
