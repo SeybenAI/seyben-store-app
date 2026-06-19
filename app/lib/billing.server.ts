@@ -1,7 +1,7 @@
 // Helpers de planes Seyben para Managed Pricing.
 //
 // IMPORTANTE: con Managed Pricing NO creamos cargos por codigo. Shopify gestiona
-// el cobro desde su pagina de planes (ver app/routes/app.billing.plans.tsx).
+// el cobro desde su pagina de planes (el upgrade se abre desde app/routes/app.pricing.tsx).
 // Aqui solo:
 //   - definimos los planes (para mostrarlos en /app/pricing)
 //   - leemos la subscripcion activa del merchant (para saber su plan actual)

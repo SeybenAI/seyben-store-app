@@ -8,14 +8,22 @@ import {
   getActiveSubscription,
 } from "../lib/billing.server";
 
+// Handle de la app (campo `name` de shopify.app.toml).
+const APP_HANDLE = "seyben-store-app";
+
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { admin } = await authenticate.admin(request);
+  const { admin, session } = await authenticate.admin(request);
   const active = await getActiveSubscription(admin).catch((e) => {
     console.warn("[pricing] active sub lookup failed:", e);
     return null;
   });
+  // URL de la pagina de planes gestionada por Shopify (Managed Pricing).
+  // storeHandle = subdominio myshopify (igual que hace el helper de Shopify).
+  const storeHandle = session.shop.replace(/\.myshopify\.com$/, "");
+  const managedPricingUrl = `https://admin.shopify.com/store/${storeHandle}/charges/${APP_HANDLE}/pricing_plans`;
   return {
     active,
+    managedPricingUrl,
     plans: {
       free: FREE_PLAN,
       starter: PLAN_DEFS.starter,
@@ -25,15 +33,16 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export default function Pricing() {
-  const { active, plans } = useLoaderData<typeof loader>();
+  const { active, plans, managedPricingUrl } = useLoaderData<typeof loader>();
 
   const currentKey = active?.planKey ?? "free";
 
-  // Managed Pricing: todos los botones de upgrade/cambio llevan a la pagina de
-  // planes gestionada por Shopify (via /app/billing/plans, que redirige fuera
-  // del iframe). Shopify gestiona el cobro; el plan se sincroniza luego por el
-  // webhook app_subscriptions/update.
-  const MANAGE_PLANS_HREF = "/app/billing/plans";
+  // Managed Pricing: el upgrade/cambio abre la pagina de planes gestionada por
+  // Shopify. Lo hacemos con window.open(..., "_top") en el click (gesto del
+  // usuario) para escapar del iframe del admin SIN pasar por un loader que
+  // re-autentique (eso daba 401). Shopify gestiona el cobro; el plan se
+  // sincroniza luego por el webhook app_subscriptions/update.
+  const openPlans = () => window.open(managedPricingUrl, "_top");
 
   return (
     <s-page heading="Planes Seyben">
@@ -80,7 +89,7 @@ export default function Pricing() {
           {currentKey === "starter" ? (
             <s-badge tone="success">Plan actual</s-badge>
           ) : (
-            <s-button href={MANAGE_PLANS_HREF}>
+            <s-button onClick={openPlans}>
               {currentKey === "free" ? "Activar Starter" : "Cambiar a Starter"}
             </s-button>
           )}
@@ -101,7 +110,7 @@ export default function Pricing() {
           {currentKey === "pro" ? (
             <s-badge tone="success">Plan actual</s-badge>
           ) : (
-            <s-button variant="primary" href={MANAGE_PLANS_HREF}>
+            <s-button variant="primary" onClick={openPlans}>
               {currentKey === "free" ? "Activar Pro" : "Cambiar a Pro"}
             </s-button>
           )}
