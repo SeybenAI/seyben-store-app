@@ -49,13 +49,13 @@ export default function Pricing() {
       <s-section heading="Tu plan actual">
         <s-stack direction="block" gap="base">
           <s-paragraph>
-            Estas en el plan <strong>{plans[currentKey].name}</strong>
+            Estás en el plan <strong>{plans[currentKey].name}</strong>
             {active?.test && " (modo prueba — esta es una development store, no se cobra)"}
             .
           </s-paragraph>
           {active && (
             <s-text tone="neutral">
-              Subscripcion activa desde {new Date(active.createdAt).toLocaleDateString()}.
+              Suscripción activa desde {new Date(active.createdAt).toLocaleDateString()}.
               {active.currentPeriodEnd &&
                 ` Siguiente cobro: ${new Date(active.currentPeriodEnd).toLocaleDateString()}.`}
             </s-text>
@@ -69,7 +69,7 @@ export default function Pricing() {
           <s-paragraph>{plans.free.description}</s-paragraph>
           <s-stack direction="block" gap="small-200">
             <s-text>✓ {plans.free.conversations} conversaciones/mes</s-text>
-            <s-text>✓ Conocimiento exhaustivo de TODA tu tienda: catalogo, precios, envios, devoluciones y FAQs</s-text>
+            <s-text>✓ Conocimiento exhaustivo de TODA tu tienda: catálogo, precios, envíos, devoluciones y FAQs</s-text>
             <s-text tone="neutral">✕ Sin voz</s-text>
           </s-stack>
           {currentKey === "free" && <s-badge tone="info">Plan actual</s-badge>}
@@ -82,9 +82,9 @@ export default function Pricing() {
           <s-paragraph>{plans.starter.description}</s-paragraph>
           <s-stack direction="block" gap="small-200">
             <s-text>✓ {plans.starter.conversations} conversaciones/mes</s-text>
-            <s-text>✓ Conocimiento exhaustivo de TODA tu tienda: catalogo, precios, envios, devoluciones y FAQs</s-text>
+            <s-text>✓ Conocimiento exhaustivo de TODA tu tienda: catálogo, precios, envíos, devoluciones y FAQs</s-text>
             <s-text>✓ Soporte por email</s-text>
-            <s-text>✓ 15 dias gratis</s-text>
+            <s-text>✓ 15 días gratis</s-text>
             <s-text tone="neutral">✕ Sin voz</s-text>
           </s-stack>
           {currentKey === "starter" ? (
@@ -103,9 +103,9 @@ export default function Pricing() {
           <s-paragraph>{plans.pro.description}</s-paragraph>
           <s-stack direction="block" gap="small-200">
             <s-text>✓ {plans.pro.conversations} conversaciones/mes</s-text>
-            <s-text>✓ Conocimiento exhaustivo de TODA tu tienda: catalogo, precios, envios, devoluciones y FAQs</s-text>
+            <s-text>✓ Conocimiento exhaustivo de TODA tu tienda: catálogo, precios, envíos, devoluciones y FAQs</s-text>
             <s-text>✓ Soporte prioritario</s-text>
-            <s-text>✓ 15 dias gratis</s-text>
+            <s-text>✓ 15 días gratis</s-text>
             <s-text>✓ Voz activada (150 minutos incluidos)</s-text>
           </s-stack>
           {currentKey === "pro" ? (
@@ -118,15 +118,15 @@ export default function Pricing() {
         </s-stack>
       </s-section>
 
-      <s-section heading="Como funciona el cobro" slot="aside">
+      <s-section heading="Cómo funciona el cobro" slot="aside">
         <s-stack direction="block" gap="base">
           <s-paragraph>
-            Pagas a traves de tu factura de Shopify. Shopify se queda con su comision
+            Pagas a través de tu factura de Shopify. Shopify se queda con su comisión
             (15%) y nos transfiere el resto. Puedes cancelar en cualquier momento
-            desde el panel de subscripciones de tu admin.
+            desde el panel de suscripciones de tu admin.
           </s-paragraph>
           <s-paragraph tone="neutral">
-            Las development stores no se cobran (Shopify marca la subscripcion como test).
+            Las development stores no se cobran (Shopify marca la suscripción como test).
           </s-paragraph>
         </s-stack>
       </s-section>

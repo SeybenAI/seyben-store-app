@@ -59,7 +59,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (!SUPABASE_URL || !SHOPIFY_INSTALL_SECRET) {
     return {
       ok: false,
-      message: "Falta configuracion en el servidor (SUPABASE_URL o SHOPIFY_INSTALL_SECRET).",
+      message: "Falta configuración en el servidor (SUPABASE_URL o SHOPIFY_INSTALL_SECRET).",
     };
   }
 
@@ -121,12 +121,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       products_count: Number(data.products_count ?? 0),
       pages_count: Number(data.pages_count ?? 0),
       message: data.already_exists
-        ? "Ya tenias un agente Seyben para esta tienda, lo hemos reactivado."
+        ? "Ya tenías un agente Seyben para esta tienda, lo hemos reactivado."
         : `Agente Seyben creado. Ha aprendido ${
             Number(data.products_count ?? 0)
           } productos y ${
             Number(data.pages_count ?? 0)
-          } paginas directamente desde tu Shopify.`,
+          } páginas directamente desde tu Shopify.`,
     };
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
@@ -189,14 +189,14 @@ export default function Index() {
       {/* ============ INTRO ============ */}
       <s-section heading={`Hola ${shop?.name ?? "tienda"} 👋`}>
         <s-paragraph>
-          Vamos a crear tu asistente de IA que atendera a tus visitantes 24/7 en{" "}
-          <strong>{shopDomain}</strong>. Seyben analizara tu tienda automaticamente
-          y respondera dudas sobre productos, envios, devoluciones y mas.
+          Vamos a crear tu asistente de IA que atenderá a tus visitantes 24/7 en{" "}
+          <strong>{shopDomain}</strong>. Seyben analizará tu tienda automáticamente
+          y responderá dudas sobre productos, envíos, devoluciones y más.
         </s-paragraph>
       </s-section>
 
       {/* ============ PASO 1: Informacion del agente ============ */}
-      <s-section heading="1. Informacion del agente">
+      <s-section heading="1. Información del agente">
         <s-stack direction="block" gap="base">
           <s-text-field
             label="Nombre del agente"
@@ -204,7 +204,7 @@ export default function Index() {
             onChange={readValue(setName)}
           />
           <s-text tone="neutral">
-            El nombre que veran tus visitantes (ej: Sofia, Asistente, ChatTienda)
+            El nombre que verán tus visitantes (ej: Sofía, Asistente, ChatTienda)
           </s-text>
 
           <s-select
@@ -212,11 +212,11 @@ export default function Index() {
             value={language}
             onChange={readValue(setLanguage)}
           >
-            <s-option value="Espanol">Espanol</s-option>
+            <s-option value="Espanol">Español</s-option>
             <s-option value="English">English</s-option>
-            <s-option value="Catala">Catala</s-option>
-            <s-option value="Francais">Francais</s-option>
-            <s-option value="Portugues">Portugues</s-option>
+            <s-option value="Catala">Català</s-option>
+            <s-option value="Francais">Français</s-option>
+            <s-option value="Portugues">Portugués</s-option>
             <s-option value="Deutsch">Deutsch</s-option>
           </s-select>
 
@@ -257,16 +257,16 @@ export default function Index() {
           </s-stack>
 
           <s-text-field
-            label="Texto del boton llamador"
+            label="Texto del botón llamador"
             value={actionText}
             onChange={readValue(setActionText)}
           />
           <s-text tone="neutral">
-            Ej: Habla con nosotros, Necesitas ayuda?, Pregunta a Sofia
+            Ej: Habla con nosotros, ¿Necesitas ayuda?, Pregunta a Sofía
           </s-text>
 
           <s-select
-            label="Posicion en la tienda"
+            label="Posición en la tienda"
             value={position}
             onChange={readValue(setPosition)}
           >
@@ -292,7 +292,7 @@ export default function Index() {
             onChange={readValue(setOwnerEmail)}
           />
           <s-text tone="neutral">
-            Donde te avisaremos cuando alguien deje su contacto en el chat
+            Dónde te avisaremos cuando alguien deje su contacto en el chat
           </s-text>
         </s-stack>
       </s-section>
@@ -301,9 +301,9 @@ export default function Index() {
       <s-section heading="4. Plan">
         <s-stack direction="block" gap="base">
           <s-paragraph>
-            Empezaras en el plan <strong>Free</strong> (50 conversaciones/mes). Cuando quieras
+            Empezarás en el plan <strong>Free</strong> (50 conversaciones/mes). Cuando quieras
             ampliar a Starter (500 conv) o Pro (2000 conv + voz) puedes activar el cobro
-            con un click desde la pagina de planes.
+            con un click desde la página de planes.
           </s-paragraph>
           <s-stack direction="inline" gap="base">
             <s-button href="/app/pricing" variant="secondary">Ver planes y precios</s-button>
@@ -314,26 +314,26 @@ export default function Index() {
       {/* ============ SIDEBAR: Conocimiento detectado ============ */}
       <s-section slot="aside" heading="Conocimiento detectado">
         <s-stack direction="block" gap="base">
-          <s-paragraph>Seyben usara esto para entrenar al agente:</s-paragraph>
+          <s-paragraph>Seyben usará esto para entrenar al agente:</s-paragraph>
           <s-stack direction="block" gap="small-200">
             <s-text>
-              ✓ <strong>{productsCount}</strong> productos del catalogo
+              ✓ <strong>{productsCount}</strong> productos del catálogo
             </s-text>
-            <s-text>✓ Politicas de envio y devolucion</s-text>
+            <s-text>✓ Políticas de envío y devolución</s-text>
             <s-text>✓ Datos de contacto y horarios</s-text>
-            <s-text>✓ Paginas de la tienda</s-text>
+            <s-text>✓ Páginas de la tienda</s-text>
           </s-stack>
-          <s-paragraph tone="neutral">Se actualiza automaticamente cada dia.</s-paragraph>
+          <s-paragraph tone="neutral">Se actualiza automáticamente cada día.</s-paragraph>
         </s-stack>
       </s-section>
 
       {/* ============ SIDEBAR: Que pasa al crear ============ */}
-      <s-section slot="aside" heading="Que pasa al pulsar Crear">
+      <s-section slot="aside" heading="Qué pasa al pulsar Crear">
         <s-unordered-list>
-          <s-list-item>Se crea tu agente Seyben con la configuracion elegida</s-list-item>
-          <s-list-item>Analizamos tu tienda y catalogo (30-90s)</s-list-item>
-          <s-list-item>Activamos el widget en {shopDomain} automaticamente</s-list-item>
-          <s-list-item>Empezara a atender visitantes y capturar leads</s-list-item>
+          <s-list-item>Se crea tu agente Seyben con la configuración elegida</s-list-item>
+          <s-list-item>Analizamos tu tienda y catálogo (30-90s)</s-list-item>
+          <s-list-item>Activamos el widget en {shopDomain} automáticamente</s-list-item>
+          <s-list-item>Empezará a atender visitantes y capturar leads</s-list-item>
         </s-unordered-list>
       </s-section>
 
@@ -358,18 +358,18 @@ export default function Index() {
                     <strong>Productos aprendidos:</strong> {fetcher.data.products_count}
                   </s-text>
                   <s-text>
-                    <strong>Paginas aprendidas:</strong> {fetcher.data.pages_count}
+                    <strong>Páginas aprendidas:</strong> {fetcher.data.pages_count}
                   </s-text>
                   <s-text tone="neutral">
                     Knowledge base: {Number(fetcher.data.knowledge_chars || 0).toLocaleString()} caracteres
-                    (leidos directamente de tu Shopify, sin scraping).
+                    (leídos directamente de tu Shopify, sin scraping).
                   </s-text>
                 </>
               )}
             </s-stack>
 
             <s-paragraph>
-              Tu agente ya esta activo. Puedes seguir su rendimiento (conversaciones, leads
+              Tu agente ya está activo. Puedes seguir su rendimiento (conversaciones, leads
               capturados) desde el panel Seyben.
             </s-paragraph>
 

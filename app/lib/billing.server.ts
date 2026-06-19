@@ -21,7 +21,7 @@ export const PLAN_DEFS = {
     interval: "EVERY_30_DAYS" as const,
     conversations: 500,
     voice: false,
-    description: "Para tiendas con trafico constante.",
+    description: "Para tiendas con tráfico constante.",
   },
   pro: {
     key: "pro" as const,
