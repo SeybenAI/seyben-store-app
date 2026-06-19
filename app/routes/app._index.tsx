@@ -258,23 +258,46 @@ export default function Index() {
               title="Elige tu propio color"
               aria-label="Color personalizado"
               style={{
+                position: "relative",
                 width: 36,
                 height: 36,
                 borderRadius: "50%",
-                border: PRESET_COLORS.includes(color) ? "2px dashed #b0b0b0" : "3px solid #1a1a1a",
+                border: PRESET_COLORS.includes(color) ? "none" : "3px solid #1a1a1a",
                 cursor: "pointer",
                 overflow: "hidden",
-                display: "block",
+                display: "grid",
+                placeItems: "center",
                 background: PRESET_COLORS.includes(color)
-                  ? "conic-gradient(red, orange, yellow, lime, cyan, blue, magenta, red)"
+                  ? "conic-gradient(from 90deg, #f87171, #fbbf24, #4ade80, #22d3ee, #818cf8, #f472b6, #f87171)"
                   : color,
+                boxShadow: "0 1px 3px rgba(0,0,0,0.18)",
               }}
             >
+              {PRESET_COLORS.includes(color) && (
+                <span
+                  aria-hidden="true"
+                  style={{
+                    width: 15,
+                    height: 15,
+                    borderRadius: "50%",
+                    background: "#fff",
+                    display: "grid",
+                    placeItems: "center",
+                    color: "#444",
+                    fontSize: 13,
+                    fontWeight: 700,
+                    lineHeight: 1,
+                    boxShadow: "0 1px 2px rgba(0,0,0,0.2)",
+                  }}
+                >
+                  +
+                </span>
+              )}
               <input
                 type="color"
                 value={/^#[0-9a-fA-F]{6}$/.test(color) ? color : "#7c3aed"}
                 onChange={(e) => setColor(e.currentTarget.value)}
-                style={{ opacity: 0, width: "100%", height: "100%", cursor: "pointer", border: 0, padding: 0 }}
+                style={{ position: "absolute", inset: 0, opacity: 0, width: "100%", height: "100%", cursor: "pointer", border: 0, padding: 0 }}
               />
             </label>
           </s-stack>
