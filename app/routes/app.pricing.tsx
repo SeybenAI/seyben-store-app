@@ -102,10 +102,10 @@ export default function Pricing() {
           <s-paragraph>{plans.pro.description}</s-paragraph>
           <s-stack direction="block" gap="small-200">
             <s-text>✓ {plans.pro.conversations} conversaciones/mes</s-text>
-            <s-text>✓ Llamadas por voz con ElevenLabs</s-text>
             <s-text>✓ Chat de texto con IA</s-text>
             <s-text>✓ Sync en tiempo real con tu catalogo</s-text>
             <s-text>✓ Soporte prioritario</s-text>
+            <s-text>✓ 150 minutos de voz incluidos</s-text>
           </s-stack>
           {currentKey === "pro" ? (
             <s-badge tone="success">Plan actual</s-badge>

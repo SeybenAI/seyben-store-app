@@ -31,7 +31,7 @@ export const PLAN_DEFS = {
     interval: "EVERY_30_DAYS" as const,
     conversations: 2000,
     voice: true,
-    description: "Hasta 2000 conversaciones/mes. Incluye llamadas por voz con ElevenLabs.",
+    description: "Hasta 2000 conversaciones/mes. Incluye 150 minutos de voz.",
   },
 } as const;
 
