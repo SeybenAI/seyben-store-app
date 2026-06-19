@@ -214,7 +214,6 @@ export default function Index() {
           >
             <s-option value="Espanol">Español</s-option>
             <s-option value="English">English</s-option>
-            <s-option value="Catala">Català</s-option>
             <s-option value="Francais">Français</s-option>
             <s-option value="Portugues">Portugués</s-option>
             <s-option value="Deutsch">Deutsch</s-option>
@@ -254,7 +253,32 @@ export default function Index() {
                 }}
               />
             ))}
+            {/* Color personalizado: abre el selector nativo para elegir cualquier color */}
+            <label
+              title="Elige tu propio color"
+              aria-label="Color personalizado"
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: "50%",
+                border: PRESET_COLORS.includes(color) ? "2px dashed #b0b0b0" : "3px solid #1a1a1a",
+                cursor: "pointer",
+                overflow: "hidden",
+                display: "block",
+                background: PRESET_COLORS.includes(color)
+                  ? "conic-gradient(red, orange, yellow, lime, cyan, blue, magenta, red)"
+                  : color,
+              }}
+            >
+              <input
+                type="color"
+                value={/^#[0-9a-fA-F]{6}$/.test(color) ? color : "#7c3aed"}
+                onChange={(e) => setColor(e.currentTarget.value)}
+                style={{ opacity: 0, width: "100%", height: "100%", cursor: "pointer", border: 0, padding: 0 }}
+              />
+            </label>
           </s-stack>
+          <s-text tone="neutral">O elige tu propio color. Color actual: {color}</s-text>
 
           <s-text-field
             label="Texto del botón llamador"
